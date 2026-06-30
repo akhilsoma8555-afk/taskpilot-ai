@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>AI Productivity Plan</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static',filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="score">
+
+🧠 AI Productivity Score
+
+<h2>{{ progress }}/100</h2>
+
+</div>
+
+<div class="card">
+
+<div class="ai-response">
+    {{ response|safe }}
+</div>
+
+</div>
+
+<br>
+
+<a href="/">
+<button>⬅ Back</button>
+</a>
+
+</div>
+
+</body>
+
+</html>

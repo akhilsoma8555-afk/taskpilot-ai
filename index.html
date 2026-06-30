@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskPilot AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>🚀 TaskPilot AI</h1>
+    <p class="subtitle">Your AI Productivity Companion</p>
+    
+
+<div class="dashboard">
+
+    <div class="box">
+        <h2>{{pending}}</h2>
+        <p>Pending</p>
+    </div>
+
+    <div class="box">
+        <h2>{{completed}}</h2>
+        <p>Completed</p>
+    </div>
+
+    <div class="box">
+        <h2>{{progress}}%</h2>
+        <p>Productivity</p>
+    </div>
+    {% if next_task %}
+
+<div class="next-task">
+
+<h2>🎯 Next Best Task</h2>
+
+<h3>{{ next_task.title }}</h3>
+
+<p>{{ next_task.description }}</p>
+
+<p>
+<b>Priority:</b>
+{{ next_task.priority }}
+</p>
+
+<p>
+<b>Deadline:</b>
+{{ next_task.deadline }}
+</p>
+
+</div>
+
+{% endif %}
+
+</div>
+
+<h3>Daily Progress</h3>
+
+<div class="progress">
+    <div class="fill" style="width:{{progress}}%"></div>
+</div>
+
+    <div class="card">
+
+        <h2>Add New Task</h2>
+
+        <form action="/add" method="POST">
+
+            <input
+                type="text"
+                name="title"
+                placeholder="Task Title"
+                required
+            >
+
+            <textarea
+                name="description"
+                placeholder="Description"
+            ></textarea>
+
+            <input
+                type="datetime-local"
+                name="deadline"
+                required
+            >
+
+            <select name="priority" required>
+    <option value="High">🔴 High</option>
+    <option value="Medium">🟡 Medium</option>
+    <option value="Low">🟢 Low</option>
+</select>
+            <button type="submit">
+                Add Task
+            </button>
+
+        </form>
+
+    </div>
+
+    <h2>Your Tasks</h2>
+
+    {% if tasks %}
+
+        {% for task in tasks %}
+
+        <div class="task">
+
+            <h3>{{ task.title }}</h3>
+
+            <p>{{ task.description }}</p>
+
+            
+
+            <p>
+<strong>🎯 Priority:</strong>
+
+{% if task.priority == "High" %}
+<span class="high-badge">🔴 High</span>
+
+{% elif task.priority == "Medium" %}
+<span class="medium-badge">🟡 Medium</span>
+
+{% else %}
+<span class="low-badge">🟢 Low</span>
+
+{% endif %}
+
+</p>
+
+            <p>
+                <strong>📌 Status:</strong>
+
+                {% if task.status=="Completed" %}
+                    <span class="completed">
+                        {{ task.status }}
+                    </span>
+                {% else %}
+                    <span class="pending">
+                        {{ task.status }}
+                    </span>
+                {% endif %}
+
+            </p>
+
+            <div class="buttons">
+
+                {% if task.status!="Completed" %}
+                <a href="/complete/{{task.id}}" class="complete-btn">
+✓ Complete
+</a>
+                {% endif %}
+
+                <a href="/delete/{{task.id}}" class="delete-btn">
+🗑 Delete
+</a>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+    <p>No tasks yet.</p>
+
+    {% endif %}
+
+<div class="summary">
+
+<h2>📊 Summary</h2>
+
+<p>Total Tasks : {{ pending + completed }}</p>
+
+<p>Completed : {{ completed }}</p>
+
+<p>Pending : {{ pending }}</p>
+
+<p>Efficiency : {{ progress }}%</p>
+<div style="text-align:center; margin:30px 0;">
+    <a href="/ai-plan">
+        <button class="ai-btn">
+            ✨ Generate Smart AI Plan
+        </button>
+    </a>
+</div>
+
+</div>
+</body>
+</html>
